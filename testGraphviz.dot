@@ -1,0 +1,40 @@
+digraph graphname {
+	rankdir=LR;
+	node [shape = box]
+	splines=ortho
+
+	PC -> InstructionMem -> IF_ID;
+
+	IF_ID [height = 10]
+
+	i_31_26 [shape = point]
+	IF_ID : ne -> i_31_26 [taillabel="[31:26]" dir = none];
+	i_31_26 -> Control
+
+	i_25_21 [shape = point]
+	IF_ID -> i_25_21 [taillabel="[25:21]" dir = none]
+	i_25_21 -> Register
+
+	i_20_16 [shape = point]
+	IF_ID -> i_20_16 [taillabel="[20:16]" dir = none]
+	i_20_16 -> Register
+
+	i_15_0 [shape = point]
+	IF_ID : se -> i_15_0 [taillabel="[15:0]" dir = none]
+	i_15_0 -> SignExtend
+	i_15_0 -> LeftShift16
+
+
+	ForwardAMux[label = "0\n1\n2"]
+	Register -> ForwardAMux : nw
+
+	ForwardBMux[label = "0\n1\n2"]
+	Register -> ForwardBMux : nw
+
+	{rank = same ForwardAMux ForwardBMux}
+
+	
+	IF_ID : se -> Control [taillabel="[5:0]"];
+
+	SignExtend -> ForwardAMux
+}
